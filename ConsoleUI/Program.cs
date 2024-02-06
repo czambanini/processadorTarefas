@@ -1,6 +1,8 @@
 ﻿using ProcessadorTarefas.Entidades;
 using Repositorio;
 using SOLID_Example.Interfaces;
+using ProcessadorTarefas.Configuracao;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SOLID_Example
 {
@@ -8,18 +10,17 @@ namespace SOLID_Example
     {
         static void Main(string[] args)
         {
-            Repository<Tarefa> repository = new Repository<Tarefa>();
 
-            //Cria 50 tarefas para ilutrarmos o funcionamento
-            for (int i = 0; i < 50; i++) { 
-                Tarefa tarefa = new Tarefa();
-                repository.Add(tarefa);
-            }
+            Repository repository = new Repository();
+            repository.GerarTarefas(20);
 
-            foreach (Tarefa tarefa in repository.GetAll())
+            //testar criação das tarefas
+            foreach (Tarefa item in repository.GetAll())
             {
-                Console.WriteLine(tarefa.ToString());
+                Console.WriteLine(item.ToString());
             }
+
+
         }
 
     }

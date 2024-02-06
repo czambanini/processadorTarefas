@@ -30,6 +30,7 @@ namespace ProcessadorTarefas.Entidades
                 subtarefas.Add(new Subtarefa());
             }
             SubtarefasPendentes = subtarefas;
+            SubtarefasExecutadas = new List<Subtarefa>();
         }
 
         public override string ToString()

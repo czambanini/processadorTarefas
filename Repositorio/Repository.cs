@@ -3,36 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProcessadorTarefas.Entidades;
 using SOLID_Example.Interfaces;
 
 
 namespace Repositorio
 {
-    public class Repository<T> : IRepository<T>
+    public class Repository : IRepository<Tarefa>
     {
-        private static List<T> repository = new List<T>();
+        public static List<Tarefa> repository = new List<Tarefa>();
 
-        public IEnumerable<T> GetAll()
+        public void GerarTarefas(int numeroTarefas)
+        {
+            for(int i = 0; i < numeroTarefas; i++)
+            {
+                Tarefa tarefa = new Tarefa();
+                repository.Add(tarefa);
+            }
+        }
+
+        public IEnumerable<Tarefa> GetAll()
         {
             return repository;
         }
 
-        public T? GetById(int id)
+        public Tarefa? GetById(int id)
         {
-            return repository.FirstOrDefault(elemento => elemento.GetType().GetProperty("Id")?.GetValue(elemento, null)?.Equals(id) ?? false);
+            return repository.FirstOrDefault(tarefa => tarefa.Id == id);
         }
-        public void Add(T entity)
+        public void Add(Tarefa entity)
         {
             repository.Add(entity);
         }
 
-        public void Update(T entity)
+        public void Update(Tarefa entity)
         {
             throw new NotImplementedException();
-            ////pegar id do t entity
-            //int entityid = entity => entity.gettype().getproperty("id")?.getvalue(elemento, null) ?
-            ////encontrar elemento no repositorio por id
-            //var elemento = getbyid(entityid);
         }
     }
 }
