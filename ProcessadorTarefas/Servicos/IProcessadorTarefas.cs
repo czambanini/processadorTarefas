@@ -2,7 +2,7 @@
 
 namespace ProcessadorTarefas.Servicos
 {
-    internal interface IProcessadorTarefas
+    public interface IProcessadorTarefas
     {
         Task Iniciar();
         Task CancelarTarefa(int idTarefa);

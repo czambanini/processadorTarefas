@@ -1,27 +1,50 @@
-﻿using ProcessadorTarefas.Entidades;
-using Repositorio;
+﻿using Repositorio;
+using ProcessadorTarefas.Servicos;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using ProcessadorTarefas.Entidades;
 using SOLID_Example.Interfaces;
-using ProcessadorTarefas.Configuracao;
-using Microsoft.IdentityModel.Tokens;
+using System;
 
-namespace SOLID_Example
+namespace ConsoleUI
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
 
-            Repository repository = new Repository();
-            repository.GerarTarefas(20);
-
-            //testar criação das tarefas
-            foreach (Tarefa item in repository.GetAll())
-            {
-                Console.WriteLine(item.ToString());
-            }
+            var serviceProvider = ConfigureServiceProvider();
+            var processador = serviceProvider.GetService<IProcessadorTarefas>();
+            var gerenciador = serviceProvider.GetService<IGerenciadorTarefas>();
 
 
         }
 
+        private static IServiceProvider ConfigureServiceProvider()
+        {
+            //IConfiguration configuration = new ConfigurationBuilder()
+            //                .SetBasePath(Directory.GetCurrentDirectory())
+            //                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            //                .Build();
+
+            IServiceCollection services = new ServiceCollection();
+            //services.AddScoped(_ => configuration);
+            services.AddSingleton<IRepository<Tarefa>, Repository>();
+            services.AddSingleton<IProcessadorTarefas, Processador>(serviceProvider =>
+            {
+                var repository = serviceProvider.GetService<IRepository<Tarefa>>();
+                return new Processador(repository); //configuration?;
+            });
+            services.AddScoped<IGerenciadorTarefas, Gerenciador>(serviceProvider =>
+            {
+                var repository = serviceProvider.GetService<IRepository<Tarefa>>();
+                return new Gerenciador(repository); //configuration;
+            });
+
+            return services.BuildServiceProvider(); ;
+        }
+
     }
+
+
 }

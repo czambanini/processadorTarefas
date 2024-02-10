@@ -13,9 +13,13 @@ namespace Repositorio
     {
         public static List<Tarefa> repository = new List<Tarefa>();
 
-        public void GerarTarefas(int numeroTarefas)
+        public Repository() {
+            GerarTarefas();
+        }
+
+        public void GerarTarefas()
         {
-            for(int i = 0; i < numeroTarefas; i++)
+            for(int i = 0; i < 10; i++)
             {
                 Tarefa tarefa = new Tarefa();
                 repository.Add(tarefa);

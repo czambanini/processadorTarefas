@@ -12,8 +12,8 @@ namespace ProcessadorTarefas.Entidades
         EstadoTarefa Estado { get; }
         DateTime IniciadaEm { get; }
         DateTime EncerradaEm { get; }
-        IEnumerable<Subtarefa> SubtarefasPendentes { get; }
-        IEnumerable<Subtarefa> SubtarefasExecutadas { get; }
+        ICollection<Subtarefa> SubtarefasPendentes { get; }
+        ICollection<Subtarefa> SubtarefasExecutadas { get; }
     }
 
 }

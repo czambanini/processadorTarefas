@@ -10,8 +10,8 @@ namespace ProcessadorTarefas.Entidades
         public EstadoTarefa Estado { get; set; }
         public DateTime IniciadaEm { get; set; }
         public DateTime EncerradaEm { get; set; }
-        public IEnumerable<Subtarefa> SubtarefasPendentes { get; set; }
-        public IEnumerable<Subtarefa> SubtarefasExecutadas { get; set; }
+        public ICollection<Subtarefa> SubtarefasPendentes { get; set; }
+        public ICollection<Subtarefa> SubtarefasExecutadas { get; set; }
 
         public GeradorId geradorid = new GeradorId();
 
@@ -22,7 +22,7 @@ namespace ProcessadorTarefas.Entidades
             Estado = EstadoTarefa.Criada;
 
             Random random = new Random();
-            int quantidadeSubtarefas = random.Next(10, 101);
+            int quantidadeSubtarefas = random.Next(5, 11);
 
             List<Subtarefa> subtarefas = new List<Subtarefa>();
             for (int i = 0; i < quantidadeSubtarefas; i++)
