@@ -17,6 +17,9 @@ namespace ConsoleUI
             var processador = serviceProvider.GetService<IProcessadorTarefas>();
             var gerenciador = serviceProvider.GetService<IGerenciadorTarefas>();
 
+            processador.Iniciar();
+
+            Menu.MenuFixo(4, gerenciador);
 
         }
 

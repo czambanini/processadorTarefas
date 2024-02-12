@@ -7,5 +7,6 @@ namespace ProcessadorTarefas.Servicos
         Task Iniciar();
         Task CancelarTarefa(int idTarefa);
         Task Encerrar();
+        Task<List<Task>> ListaProcessando();
     }
 }

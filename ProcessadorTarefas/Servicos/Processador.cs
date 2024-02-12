@@ -11,6 +11,7 @@ namespace ProcessadorTarefas.Servicos
     public class Processador : IProcessadorTarefas
     {
         private IRepository<Tarefa> _repositorio;
+        public List<Task> tarefasExecutando = new List<Task>();
 
         public Processador(IRepository<Tarefa> repositorio)
         {
@@ -24,26 +25,30 @@ namespace ProcessadorTarefas.Servicos
 
         public async Task ProcessarTarefa(Tarefa tarefa)
         {
-            Console.WriteLine($"Iniciando tarefa {tarefa.Id}");
+            //Console.WriteLine($"Iniciando tarefa {tarefa.Id}");
             tarefa.Estado = EstadoTarefa.EmExecucao;
 
             foreach (Subtarefa subtarefa in tarefa.SubtarefasPendentes)
             {
                 await ProcessarSubtarefa(subtarefa);
                 tarefa.SubtarefasExecutadas.Add(subtarefa);
-                //tarefa.SubtarefasPendentes.Remove(subtarefa);
+                tarefa.SubtarefasPendentes.Except(new[] { subtarefa });
             }
 
             tarefa.Estado = EstadoTarefa.Concluida;
-            Console.WriteLine($"Tarefa {tarefa.Id} concluída");
         }
 
-        public async Task ProcessadorPrincipal(int NumeroTarefasParalelas)
+        public async Task<List<Task>> ListaProcessando()
+        {
+            await Task.WhenAny(tarefasExecutando);
+            return tarefasExecutando;
+        }
+
+        public async Task Iniciar()
         {
             Queue<Tarefa> filaTarefas = new Queue<Tarefa>(_repositorio.GetAll());
-            List<Task> tarefasExecutando = new List<Task>();
 
-            while (tarefasExecutando.Count < NumeroTarefasParalelas) {
+            while (tarefasExecutando.Count < 5) {
                 Tarefa tarefa = filaTarefas.Dequeue();
                 tarefasExecutando.Add(ProcessarTarefa(tarefa));
             }
@@ -64,10 +69,10 @@ namespace ProcessadorTarefas.Servicos
 
         }
 
-        public Task Iniciar()
-        {
-            throw new NotImplementedException();
-        }
+        //public Task Iniciar()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task Encerrar()
         {

@@ -37,14 +37,14 @@ namespace ProcessadorTarefas.Servicos
 
         public Task<IEnumerable<Tarefa>> ListarAtivas()
         {
-            var tarefasinativas = _repositorio.GetAll().Where(t => t.Estado != EstadoTarefa.Cancelada || t.Estado != EstadoTarefa.Concluida);
-            return Task.FromResult(tarefasinativas);
+            var tarefasAtivas = _repositorio.GetAll().Where(t => t.Estado != EstadoTarefa.Cancelada && t.Estado != EstadoTarefa.Concluida);
+            return Task.FromResult(tarefasAtivas);
         }
 
         public Task<IEnumerable<Tarefa>> ListarInativas()
         {
-            var tarefasinativas = _repositorio.GetAll().Where(t => t.Estado == EstadoTarefa.Cancelada || t.Estado == EstadoTarefa.Concluida);
-            return Task.FromResult(tarefasinativas);
+            var tarefasInativas = _repositorio.GetAll().Where(t => t.Estado == EstadoTarefa.Cancelada || t.Estado == EstadoTarefa.Concluida);
+            return Task.FromResult(tarefasInativas);
         }
     }
 }

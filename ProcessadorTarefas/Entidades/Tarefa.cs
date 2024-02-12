@@ -35,7 +35,14 @@ namespace ProcessadorTarefas.Entidades
 
         public override string ToString()
         {
-            return $"Tarefa {Id} - {Estado} - {SubtarefasPendentes?.Count() ?? 0} Subtarefas Pendentes e {SubtarefasExecutadas?.Count() ?? 0} Subtarefas Executadas";
+            List<string> partes = new List<string>();
+
+            partes.Add($"Tarefa {Id}".PadRight(15));
+            partes.Add($"{Estado}".PadRight(15));
+            partes.Add($"{SubtarefasPendentes?.Count()} Subtarefas Pendentes".PadRight(30));
+            partes.Add($"{SubtarefasExecutadas?.Count()} Subtarefas Executadas");
+
+            return string.Join("", partes);
         }
 
     }
