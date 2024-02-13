@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProcessadorTarefas.Entidades;
 using SOLID_Example.Interfaces;
 using System;
+using System.Reflection.Metadata;
 
 namespace ConsoleUI
 {
@@ -25,26 +26,23 @@ namespace ConsoleUI
 
         private static IServiceProvider ConfigureServiceProvider()
         {
-            //IConfiguration configuration = new ConfigurationBuilder()
-            //                .SetBasePath(Directory.GetCurrentDirectory())
-            //                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            //                .Build();
+            string basePath = Path.GetFullPath("appsettings.json").Replace("\\bin\\Debug\\net8.0", "");
 
-            IServiceCollection services = new ServiceCollection();
-            //services.AddScoped(_ => configuration);
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddJsonFile(basePath, optional: true, reloadOnChange: true)
+                            .Build();
+
+            var services = new ServiceCollection();
+            services.AddScoped(_ => configuration);
             services.AddSingleton<IRepository<Tarefa>, Repository>();
-            services.AddSingleton<IProcessadorTarefas, Processador>(serviceProvider =>
-            {
-                var repository = serviceProvider.GetService<IRepository<Tarefa>>();
-                return new Processador(repository); //configuration?;
-            });
+            services.AddSingleton<IProcessadorTarefas, Processador>();
             services.AddScoped<IGerenciadorTarefas, Gerenciador>(serviceProvider =>
             {
                 var repository = serviceProvider.GetService<IRepository<Tarefa>>();
                 return new Gerenciador(repository); //configuration;
             });
 
-            return services.BuildServiceProvider(); ;
+            return services.BuildServiceProvider();
         }
 
     }

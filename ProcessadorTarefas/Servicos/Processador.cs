@@ -1,4 +1,5 @@
-﻿using ProcessadorTarefas.Entidades;
+﻿using Microsoft.Extensions.Configuration;
+using ProcessadorTarefas.Entidades;
 using SOLID_Example.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace ProcessadorTarefas.Servicos
     {
         private IRepository<Tarefa> _repositorio;
         public List<Task> tarefasExecutando = new List<Task>();
+        private IConfiguration _configuracao;
 
-        public Processador(IRepository<Tarefa> repositorio)
+        public Processador(IRepository<Tarefa> repositorio, IConfiguration configuracao)
         {
             _repositorio = repositorio;
+            _configuracao = configuracao;
         }
 
         public async Task ProcessarSubtarefa(Subtarefa subtarefa)
@@ -47,8 +50,8 @@ namespace ProcessadorTarefas.Servicos
         public async Task Iniciar()
         {
             Queue<Tarefa> filaTarefas = new Queue<Tarefa>(_repositorio.GetAll());
-
-            while (tarefasExecutando.Count < 5) {
+            var quantidadeTaskParalelo = int.Parse(_configuracao["ExecucaoOptions:MaximoPorVez"]);
+            while (tarefasExecutando.Count < quantidadeTaskParalelo) {
                 Tarefa tarefa = filaTarefas.Dequeue();
                 tarefasExecutando.Add(ProcessarTarefa(tarefa));
             }
